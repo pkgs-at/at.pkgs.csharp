@@ -17,8 +17,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;COMPAT20</DefineConstants>
+    <OutputPath>..\binary\debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -26,8 +26,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;COMPAT20</DefineConstants>
+    <OutputPath>..\binary\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -38,7 +38,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compat20\ExtensionSupport.cs" />
     <Compile Include="Data\ModelBinder.cs" />
     <Compile Include="Logging\Configuration\BasicLoggingConfiguration.cs" />
     <Compile Include="Logging\Sink\InterProcessFileLogAppenders.cs" />
@@ -71,7 +70,13 @@
     <Compile Include="Util\Strings.cs" />
     <Compile Include="Util\XmlScanner.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\At.Pkgs.Compat20\At.Pkgs.Compat20.csproj">
+      <Project>{411F75FD-64DA-43FE-BFE0-3D29FA498620}</Project>
+      <Name>At.Pkgs.Compat20</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

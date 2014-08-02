@@ -17,8 +17,6 @@
 
 using System;
 
-#if COMPAT20
-
 namespace System.Runtime.CompilerServices
 {
 
@@ -29,5 +27,3 @@ namespace System.Runtime.CompilerServices
     public sealed class ExtensionAttribute : Attribute { }
 
 }
-
-#endif

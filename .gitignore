@@ -37,3 +37,6 @@ Icon
 
 At.Pkgs.sln.docstates.suo
 At.Pkgs.suo
+At.Pkgs/obj
+At.Pkgs.Compat20/obj
+At.Pkgs.Velocity/obj
