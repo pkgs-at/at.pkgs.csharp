@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Mail;
@@ -128,6 +129,30 @@ namespace At.Pkgs.Util
             public Message Send()
             {
                 this.Transport.Client.Send(this._message);
+                return this;
+            }
+
+            public delegate void MessageAction<EntityType>(
+                Message message,
+                EntityType entity);
+
+            public Message ForEach<EntityType>(
+                IEnumerable<EntityType> enumerable,
+                MessageAction<EntityType> action)
+            {
+                if (enumerable != null)
+                    foreach (EntityType entity in enumerable)
+                        action(this, entity);
+                return this;
+            }
+
+            public Message ForEach<EntityType>(
+                IEnumerable<EntityType> enumerable,
+                Action<EntityType> action)
+            {
+                if (enumerable != null)
+                    foreach (EntityType entity in enumerable)
+                        action(entity);
                 return this;
             }
 
