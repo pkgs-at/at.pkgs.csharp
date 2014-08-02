@@ -67,6 +67,7 @@
     <Compile Include="Logging\Sink\WriterAppender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\InterProcessLock.cs" />
+    <Compile Include="Util\MailTransport.cs" />
     <Compile Include="Util\Strings.cs" />
     <Compile Include="Util\XmlScanner.cs" />
   </ItemGroup>
