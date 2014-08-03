@@ -27,6 +27,42 @@ namespace At.Pkgs.Util
     public class MailTransport
     {
 
+        public class AddressList : List<MailAddress>
+        {
+
+            private MailTransport _transport;
+
+            public AddressList(MailTransport transport)
+            {
+                this._transport = transport;
+            }
+
+            public MailTransport Transport
+            {
+                get
+                {
+                    return this._transport;
+                }
+            }
+
+            public new AddressList Add(MailAddress address)
+            {
+                base.Add(address);
+                return this;
+            }
+
+            public AddressList Add(string address, string name)
+            {
+                return this.Add(this.Transport.MailAddress(address, name));
+            }
+
+            public AddressList Add(string address)
+            {
+                return this.Add(address, null);
+            }
+
+        }
+
         public class Message : IDisposable
         {
 
@@ -48,31 +84,15 @@ namespace At.Pkgs.Util
                 }
             }
 
-            protected string Encode(string text)
+            public Message From(MailAddress address)
             {
-                byte[] bytes;
-
-                if (text == null) return null;
-                bytes = this.Transport.Encoding.GetBytes(text);
-                return new StringBuilder()
-                    .Append("=?")
-                    .Append(this.Transport.Encoding.HeaderName)
-                    .Append("?B?")
-                    .Append(Convert.ToBase64String(bytes))
-                    .Append("?=")
-                    .ToString();
-            }
-
-            protected MailAddress MailAddress(string address, string name)
-            {
-                if (name == null) return new MailAddress(address);
-                else return new MailAddress(address, this.Encode(name));
+                this._message.From = address;
+                return this;
             }
 
             public Message From(string address, string name)
             {
-                this._message.From = this.MailAddress(address, name);
-                return this;
+                return this.From(this.Transport.MailAddress(address, name));
             }
 
             public Message From(string address)
@@ -80,10 +100,15 @@ namespace At.Pkgs.Util
                 return this.From(address, null);
             }
 
+            public Message To(MailAddress address)
+            {
+                this._message.To.Add(address);
+                return this;
+            }
+
             public Message To(string address, string name)
             {
-                this._message.To.Add(this.MailAddress(address, name));
-                return this;
+                return this.To(this.Transport.MailAddress(address, name));
             }
 
             public Message To(string address)
@@ -91,10 +116,22 @@ namespace At.Pkgs.Util
                 return this.To(address, null);
             }
 
+            public Message To(IEnumerable<MailAddress> addresses)
+            {
+                foreach (MailAddress address in addresses)
+                    this.To(address);
+                return this;
+            }
+
+            public Message Cc(MailAddress address)
+            {
+                this._message.CC.Add(address);
+                return this;
+            }
+
             public Message Cc(string address, string name)
             {
-                this._message.CC.Add(this.MailAddress(address, name));
-                return this;
+                return this.Cc(this.Transport.MailAddress(address, name));
             }
 
             public Message Cc(string address)
@@ -102,10 +139,22 @@ namespace At.Pkgs.Util
                 return this.Cc(address, null);
             }
 
+            public Message Cc(IEnumerable<MailAddress> addresses)
+            {
+                foreach (MailAddress address in addresses)
+                    this.Cc(address);
+                return this;
+            }
+
+            public Message Bcc(MailAddress address)
+            {
+                this._message.Bcc.Add(address);
+                return this;
+            }
+
             public Message Bcc(string address, string name)
             {
-                this._message.Bcc.Add(this.MailAddress(address, name));
-                return this;
+                return this.Bcc(this.Transport.MailAddress(address, name));
             }
 
             public Message Bcc(string address)
@@ -113,9 +162,16 @@ namespace At.Pkgs.Util
                 return this.Bcc(address, null);
             }
 
+            public Message Bcc(IEnumerable<MailAddress> addresses)
+            {
+                foreach (MailAddress address in addresses)
+                    this.Bcc(address);
+                return this;
+            }
+
             public Message Subject(string text)
             {
-                this._message.Subject = this.Encode(text);
+                this._message.Subject = this.Transport.Encode(text);
                 return this;
             }
 
@@ -129,30 +185,6 @@ namespace At.Pkgs.Util
             public Message Send()
             {
                 this.Transport.Client.Send(this._message);
-                return this;
-            }
-
-            public delegate void MessageAction<EntityType>(
-                Message message,
-                EntityType entity);
-
-            public Message ForEach<EntityType>(
-                IEnumerable<EntityType> enumerable,
-                MessageAction<EntityType> action)
-            {
-                if (enumerable != null)
-                    foreach (EntityType entity in enumerable)
-                        action(this, entity);
-                return this;
-            }
-
-            public Message ForEach<EntityType>(
-                IEnumerable<EntityType> enumerable,
-                Action<EntityType> action)
-            {
-                if (enumerable != null)
-                    foreach (EntityType entity in enumerable)
-                        action(entity);
                 return this;
             }
 
@@ -221,6 +253,27 @@ namespace At.Pkgs.Util
         public MailTransport Credentials(string username, string password)
         {
             return this.Credentials(new NetworkCredential(username, password));
+        }
+
+        public string Encode(string text)
+        {
+            byte[] bytes;
+
+            if (text == null) return null;
+            bytes = this.Encoding.GetBytes(text);
+            return new StringBuilder()
+                .Append("=?")
+                .Append(this.Encoding.HeaderName)
+                .Append("?B?")
+                .Append(Convert.ToBase64String(bytes))
+                .Append("?=")
+                .ToString();
+        }
+
+        public MailAddress MailAddress(string address, string name)
+        {
+            if (name == null) return new MailAddress(address);
+            else return new MailAddress(address, this.Encode(name));
         }
 
         public Message NewMessage()
