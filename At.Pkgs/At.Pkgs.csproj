@@ -39,8 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ModelBinder.cs" />
+    <Compile Include="IO\CloseShieldStream.cs" />
+    <Compile Include="IO\EncodingStringWriter.cs" />
+    <Compile Include="IO\StreamWrapper.cs" />
     <Compile Include="Logging\Configuration\BasicLoggingConfiguration.cs" />
     <Compile Include="Logging\Sink\InterProcessFileLogAppenders.cs" />
+    <Compile Include="Util\ObjectCache.cs" />
     <Compile Include="Util\Dumper.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEntity.cs" />
@@ -72,16 +76,15 @@
     <Compile Include="Util\XmlScanner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\At.Pkgs.Compat20\At.Pkgs.Compat20.csproj">
-      <Project>{411F75FD-64DA-43FE-BFE0-3D29FA498620}</Project>
-      <Name>At.Pkgs.Compat20</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="At.Pkgs.license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\At.Pkgs.Compat20\At.Pkgs.Compat20.csproj">
+      <Project>{411F75FD-64DA-43FE-BFE0-3D29FA498620}</Project>
+      <Name>At.Pkgs.Compat20</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
