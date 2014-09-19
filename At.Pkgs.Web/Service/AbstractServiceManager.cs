@@ -112,7 +112,7 @@ namespace At.Pkgs.Web.Service
         public void ProcessRequest(HttpContext context)
         {
             string key;
-            ServiceHandler handler;
+            HandlerType handler;
 
             key =
                 this.GetContainerKey(
@@ -130,9 +130,10 @@ namespace At.Pkgs.Web.Service
                 return;
             }
             handler =
-                (ServiceHandler)Activator.CreateInstance(
+                (HandlerType)Activator.CreateInstance(
                     this._handlers[key]);
             handler.Initialize(context);
+            this.PrepareHandler(handler);
             if (!handler.Prepare()) return;
             if (!handler.Handle()) return;
             if (!handler.Complete()) return;
