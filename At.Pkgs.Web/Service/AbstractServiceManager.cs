@@ -111,13 +111,14 @@ namespace At.Pkgs.Web.Service
 
         public void ProcessRequest(HttpContext context)
         {
+            string path;
             string key;
             HandlerType handler;
 
-            key =
-                this.GetContainerKey(
-                    context.Request.HttpMethod,
-                    context.Request.AppRelativeCurrentExecutionFilePath);
+            path =
+                context.Request.AppRelativeCurrentExecutionFilePath +
+                context.Request.PathInfo;
+            key = this.GetContainerKey(context.Request.HttpMethod, path);
             if (!this._handlers.ContainsKey(key))
             {
                 context.Response.Clear();
