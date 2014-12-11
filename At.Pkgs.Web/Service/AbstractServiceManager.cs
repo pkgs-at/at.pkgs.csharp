@@ -109,7 +109,7 @@ namespace At.Pkgs.Web.Service
             // do nothing
         }
 
-        public void ProcessRequest(HttpContext context)
+        public virtual void ProcessRequest(HttpContext context)
         {
             string path;
             string key;
